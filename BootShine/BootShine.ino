@@ -32,11 +32,11 @@ void loop(){
 
 void move_x_and_rotate(double degree, double mm){
     Stepper_x.step(mm_to_steps(mm)); 
-    delay(10);
+    delay(10); // We can't delay! 
     digitalWrite(solenoidPin, HIGH); 
     Stepper_rotation.step(degrees_to_steps(degree));
 
-    delay(10);
+    delay(10); // We can't delay!
 }
 
 void openContainer(){
@@ -48,10 +48,10 @@ void closeContainer(){
   Stepper_x.step(mm_to_steps(-mm));
 }
 
-double mm_to_steps(double mm){
+int mm_to_steps(double mm){
   //TODO: Convert mm to steps
 }
 
-double degrees_to_steps(double degree){
+int degrees_to_steps(double degree){
   //TODO: Convert degrees to steps 
 }
