@@ -38,9 +38,8 @@ boolean UV_timedRun(int milliseconds){
   do{
      digitalWrite(UV_RelayPin, HIGH); 
   }while(!waitMilliseconds(milliseconds);
-   
   
- 
+  digitalWrite(UV_RelayPin, LOW); 
 }
 
 boolean waitMilliseconds(int milliseconds){
