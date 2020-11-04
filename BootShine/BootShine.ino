@@ -1,3 +1,5 @@
+#include<Stepper>
+
 unsigned long previousMilliseconds = 0; 
 
 int limitSwitchPin = 6;
@@ -30,6 +32,15 @@ void setup(){
 
 void loop(){
   
+}
+
+boolean UV_timedRun(int milliseconds){
+  do{
+     digitalWrite(UV_RelayPin, HIGH); 
+  }while(!waitMilliseconds(milliseconds);
+   
+  
+ 
 }
 
 boolean waitMilliseconds(int milliseconds){
