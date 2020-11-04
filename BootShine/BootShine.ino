@@ -1,3 +1,5 @@
+unsigned long previousMilliseconds = 0; 
+
 int limitSwitchPin = 6;
 //Each Stepper Motor takes 4 pins 
 int rotationalStepperPin1 = 7, rotationalStepperPin2 = 6, rotationalStepperPin3 = 5, rotatioanlStepperPin4 = 4; 
@@ -30,13 +32,14 @@ void loop(){
   
 }
 
-void move_x_and_rotate(double degree, double mm){
-    Stepper_x.step(mm_to_steps(mm)); 
-    delay(10); // We can't delay! 
-    digitalWrite(solenoidPin, HIGH); 
-    Stepper_rotation.step(degrees_to_steps(degree));
-
-    delay(10); // We can't delay!
+boolean waitMilliseconds(int milliseconds){
+  unsigned long currentMilliseconds = millis();
+  if(currentMilliseconds-previousMilliseconds >= milliseconds){
+    previousMilliseconds = currentMilliseconds;
+    return true;
+  }else{
+    return false; 
+  }
 }
 
 void openContainer(){
