@@ -39,10 +39,10 @@ void loop(){
 
 boolean UV_timedRun(int milliseconds){
   do{
-     digitalWrite(UV_RelayPin, HIGH); 
+     setRelay(true);
   }while(!waitMilliseconds(milliseconds);
   
-  digitalWrite(UV_RelayPin, LOW); 
+    setRelay(false);
 }
 
 boolean waitMilliseconds(int milliseconds){
@@ -52,6 +52,14 @@ boolean waitMilliseconds(int milliseconds){
     return true;
   }else{
     return false; 
+  }
+}
+
+void setRelay(boolean toggle){
+  if(toggle){
+    digitalWrite(UV_RelayPin, HIGH);
+  }else{
+    digitalWrite(UV_RelayPin, LOW); 
   }
 }
 
