@@ -12,7 +12,17 @@ int tactileEmergencyStopPin = 10;
 
 const int stepsPerRevolution = 200; //Depends on stepper motor 
 const int mmToOpen = 0; //TBD 
-const int mmToClose = 0; //TBD 
+const int mmToClose = 0; //TBD
+
+const int UV_Runtime_1 = 0; //TBD
+const int UV_Runtime_2 = 0; //TBD
+const int UV_Runtime_3 = 0; //TBD
+const int UV_Runtime_4 = 0; //TBD 
+
+const int rotationInDegrees1 = 0; //TBD
+const int rotationInDegrees2 = 0; //TBD 
+const int rotationInDegrees3 = 0; //TBD 
+const int rotationInDegrees4 = 0; //TBD  
 
 
 Stepper rotationalStepperMotor(stepsPerRevolution, rotationalStepperPin1, rotationalStepperPin2, rotationalStepperPin3, rotatioanlStepperPin4); 
@@ -37,6 +47,18 @@ void loop(){
   
 }
 
+void sanatizeProcedure(){
+  if(!isTriggeredEmergencyButton){
+    UV_timedRun(UV_Runtime_1);
+    setRotationalMotorDegrees(rotationInDegrees1);
+    UV_timedRun(UV_Runtime_2);
+    setRotationalMotorDegrees(rotationInDegrees2);
+    UV_timedRun(UV_Runtime_3);
+    setRotationalMotorDegrees(rotationInDegrees3);
+    UV_timedRun(UV_Runtime_4);
+    setRotationalMotorDegrees(rotationInDegrees4);
+  }
+}
 
 void openContainer(){
   //Move stepper to extrude the table outside of the container for remote operation. 
@@ -47,7 +69,7 @@ void closeContainer(){
   setExtrusionMotorMM(mmToClose);
 }
 
-boolean UV_timedRun(int milliseconds){
+void UV_timedRun(int milliseconds){
   do{
      setRelay(true);
   }while(!waitMilliseconds(milliseconds);
