@@ -37,6 +37,16 @@ void loop(){
   
 }
 
+
+void openContainer(){
+  //Move stepper to extrude the table outside of the container for remote operation. 
+  setExtrusionMotorMM(mmToOpen);
+}
+void closeContainer(){
+  //Move stepper to retract the table back into the container. 
+  setExtrusionMotorMM(mmToClose);
+}
+
 boolean UV_timedRun(int milliseconds){
   do{
      setRelay(true);
@@ -101,15 +111,6 @@ boolean isTriggeredEmergencyButton(){
   }else{
     return false; 
   }
-}
-
-void openContainer(){
-  //Move stepper to extrude the table outside of the container for remote operation. 
-  setExtrusionMotorMM(mmToOpen);
-}
-void closeContainer(){
-  //Move stepper to retract the table back into the container. 
-  setExtrusionMotorMM(mmToClose);
 }
 
 int mm_to_steps(double mm){
