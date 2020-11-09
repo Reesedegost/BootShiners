@@ -63,13 +63,29 @@ void setRelay(boolean toggle){
   }
 }
 
+void setExtrusionMotorMM(int mm){
+   extrusionStepperMotor.step(mm_to_steps(mm));
+}
+
+void setExtrusionMotorStep(int steps){
+  extrusionStepperMotor.step(steps);
+}
+
+void setRotationalMotorDegrees(int degree){
+  rotationalStepperMotor.step(degrees_to_steps(degree));
+}
+
+void setRotationalMotorStep(int setps){
+  rotationalStepperMotor.step(steps);
+}
+
 void openContainer(){
   //Move stepper to extrude the table outside of the container for remote operation. 
-  extrusionStepperMotor.step(mm_to_steps(mmToOpen));
+  setExtrusionMotorMM(mmToOpen);
 }
 void closeContainer(){
   //Move stepper to retract the table back into the container. 
-  extrusionStepperMotor.step(mm_to_steps(mmToClose));
+  setExtrusionMotorMM(mmToClose);
 }
 
 int mm_to_steps(double mm){
