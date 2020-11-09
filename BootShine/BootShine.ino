@@ -79,6 +79,14 @@ void setRotationalMotorStep(int setps){
   rotationalStepperMotor.step(steps);
 }
 
+boolean isLimitSwitch(){
+  if(digitalRead(limitSwitchPin) == HIGH)){
+    return true; 
+  }else{
+    return false; 
+  }
+}
+
 void openContainer(){
   //Move stepper to extrude the table outside of the container for remote operation. 
   setExtrusionMotorMM(mmToOpen);
