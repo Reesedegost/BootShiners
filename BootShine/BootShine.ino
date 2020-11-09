@@ -11,6 +11,9 @@ int toggleOnButtonPin = 11;
 int toggleEmergencyStopPin = 10;
 
 const int stepsPerRevolution = 200; //Depends on stepper motor 
+const int mmToOpen = 0; //TBD 
+const int mmToClose = 0; //TBD 
+
 
 Stepper rotationalStepperMotor(stepsPerRevolution, rotationalStepperPin1, rotationalStepperPin2, rotationalStepperPin3, rotatioanlStepperPin4); 
 Stepper extrusionStepperMotor(stepsPerRevolution, extrusionStepperPin1, extrusionStepperPin2, extrusionStepperPin3, extrusionStepperPin4);
@@ -54,11 +57,11 @@ boolean waitMilliseconds(int milliseconds){
 
 void openContainer(){
   //Move stepper to extrude the table outside of the container for remote operation. 
-  Stepper_x.step(mm_to_steps(mm));
+  Stepper_x.step(mm_to_steps(mmToOpen));
 }
 void closeContainer(){
-  //Move stepper to extrude the table outside of the container for remote operation. 
-  Stepper_x.step(mm_to_steps(-mm));
+  //Move stepper to retract the table back into the container. 
+  Stepper_x.step(mm_to_steps(mmToClose));
 }
 
 int mm_to_steps(double mm){
