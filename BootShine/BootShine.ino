@@ -7,8 +7,8 @@ int limitSwitchPin = 6;
 int rotationalStepperPin1 = 7, rotationalStepperPin2 = 6, rotationalStepperPin3 = 5, rotatioanlStepperPin4 = 4; 
 int extrusionStepperPin1 = 3, extrusionStepperPin2 = 2, extrusionStepperPin3 = 1, extrusionStepperPin4 = 0; 
 int UV_RelayPin = 12; 
-int toggleOnButtonPin = 11; 
-int toggleEmergencyStopPin = 10;
+int tactileOnButtonPin = 11; 
+int tactileEmergencyStopPin = 10;
 
 const int stepsPerRevolution = 200; //Depends on stepper motor 
 const int mmToOpen = 0; //TBD 
@@ -81,6 +81,22 @@ void setRotationalMotorStep(int setps){
 
 boolean isLimitSwitch(){
   if(digitalRead(limitSwitchPin) == HIGH)){
+    return true; 
+  }else{
+    return false; 
+  }
+}
+
+boolean isTriggeredOnButton(){
+  if(digitalRead(tactileOnButtonPin) == HIGH){
+    return true; 
+  }else{
+    return false; 
+  }
+}
+
+boolean isTriggeredEmergencyButton(){
+  if(digitalRead(tactileEmergencyStopPin) == HIGH){
     return true; 
   }else{
     return false; 
