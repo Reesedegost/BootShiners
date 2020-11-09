@@ -57,11 +57,11 @@ boolean waitMilliseconds(int milliseconds){
 
 void openContainer(){
   //Move stepper to extrude the table outside of the container for remote operation. 
-  Stepper_x.step(mm_to_steps(mmToOpen));
+  extrusionStepperMotor.step(mm_to_steps(mmToOpen));
 }
 void closeContainer(){
   //Move stepper to retract the table back into the container. 
-  Stepper_x.step(mm_to_steps(mmToClose));
+  extrusionStepperMotor.step(mm_to_steps(mmToClose));
 }
 
 int mm_to_steps(double mm){
