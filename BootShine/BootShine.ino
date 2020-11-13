@@ -51,6 +51,8 @@ void loop(){
   if(!EMERGENCY_ON_STATE){
 
      
+  }else{
+    
   }
 }
 
