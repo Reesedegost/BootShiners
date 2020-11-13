@@ -2,7 +2,7 @@
 
 unsigned long previousMilliseconds = 0; 
 
-int limitSwitchPin = 6;
+int limitSwitchPin = 13;
 //Each Stepper Motor takes 4 pins 
 int rotationalStepperPin1 = 7, rotationalStepperPin2 = 6, rotationalStepperPin3 = 5, rotatioanlStepperPin4 = 4; 
 int extrusionStepperPin1 = 3, extrusionStepperPin2 = 2, extrusionStepperPin3 = 1, extrusionStepperPin4 = 0; 
@@ -24,6 +24,7 @@ const int rotationInDegrees2 = 0; //TBD
 const int rotationInDegrees3 = 0; //TBD 
 const int rotationInDegrees4 = 0; //TBD  
 
+boolean EMERGENCY_INTERRUPT_STATE = false;
 
 Stepper rotationalStepperMotor(stepsPerRevolution, rotationalStepperPin1, rotationalStepperPin2, rotationalStepperPin3, rotatioanlStepperPin4); 
 Stepper extrusionStepperMotor(stepsPerRevolution, extrusionStepperPin1, extrusionStepperPin2, extrusionStepperPin3, extrusionStepperPin4);
@@ -38,9 +39,10 @@ void setup(){
   pinMode(extrusionStepperPin2, INPUT); 
   pinMode(extrusionStepperPin3, INPUT); 
   pinMode(extrusionStepperPin4, INPUT); 
-  pinMode(UV_RelayPin, INPUT); 
+  pinMode(UV_RelayPin, OUTPUT); 
   pinMode(toggleOnButtonPin, INPUT); 
-  pinMode(toggleEmergencyButtonPin, INPUT); 
+  pinMode(toggleEmergencyButtonPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(tactileEmergencyStopPin), emergencyInterrupt(), CHANGE); 
 }
 
 void loop(){
@@ -48,7 +50,6 @@ void loop(){
 }
 
 void sanatizeProcedure(){
-  if(!isTriggeredEmergencyButton){
     UV_timedRun(UV_Runtime_1);
     setRotationalMotorDegrees(rotationInDegrees1);
     UV_timedRun(UV_Runtime_2);
@@ -57,7 +58,6 @@ void sanatizeProcedure(){
     setRotationalMotorDegrees(rotationInDegrees3);
     UV_timedRun(UV_Runtime_4);
     setRotationalMotorDegrees(rotationInDegrees4);
-  }
 }
 
 void openContainer(){
@@ -75,6 +75,10 @@ void UV_timedRun(int milliseconds){
   }while(!waitMilliseconds(milliseconds);
   
     setRelay(false);
+}
+
+void emergencyInterrupt(){
+  EMERGENCY_INTERRUPT_STATE = true; 
 }
 
 boolean waitMilliseconds(int milliseconds){
@@ -121,14 +125,6 @@ boolean isLimitSwitch(){
 
 boolean isTriggeredOnButton(){
   if(digitalRead(tactileOnButtonPin) == HIGH){
-    return true; 
-  }else{
-    return false; 
-  }
-}
-
-boolean isTriggeredEmergencyButton(){
-  if(digitalRead(tactileEmergencyStopPin) == HIGH){
     return true; 
   }else{
     return false; 
