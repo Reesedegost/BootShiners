@@ -9,6 +9,7 @@ int extrusionStepperPin1 = 3, extrusionStepperPin2 = 2, extrusionStepperPin3 = 1
 int UV_RelayPin = 12; 
 int tactileOnButtonPin = 11; 
 int tactileEmergencyStopPin = 10;
+int LED_openDoorIndicatorPin = 9;  
 
 const int stepsPerRevolution = 200; //Depends on stepper motor 
 const int mmToOpen = 0; //TBD 
@@ -30,6 +31,7 @@ Stepper rotationalStepperMotor(stepsPerRevolution, rotationalStepperPin1, rotati
 Stepper extrusionStepperMotor(stepsPerRevolution, extrusionStepperPin1, extrusionStepperPin2, extrusionStepperPin3, extrusionStepperPin4);
 
 void setup(){
+  pinMode(LED_onPin, OUTPUT); 
   pinMode(limitSwitchPin, INPUT); 
   pinMode(rotationalStepperPin1, INPUT);
   pinMode(rotationalStepperPin2, INPUT);
@@ -46,7 +48,10 @@ void setup(){
 }
 
 void loop(){
-  
+  if(!EMERGENCY_ON_STATE){
+
+     
+  }
 }
 
 void sanatizeProcedure(){
@@ -62,10 +67,12 @@ void sanatizeProcedure(){
 
 void openContainer(){
   //Move stepper to extrude the table outside of the container for remote operation. 
+  digitalWrite(LED_onPin, HIGH);
   setExtrusionMotorMM(mmToOpen);
 }
 void closeContainer(){
   //Move stepper to retract the table back into the container. 
+  digitalWrite(LED_onPin, LOW); 
   setExtrusionMotorMM(mmToClose);
 }
 
