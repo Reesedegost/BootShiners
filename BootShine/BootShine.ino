@@ -9,7 +9,8 @@ int extrusionStepperPin1 = 3, extrusionStepperPin2 = 2, extrusionStepperPin3 = 1
 int UV_RelayPin = 12; 
 int tactileOnButtonPin = 11; 
 int tactileEmergencyStopPin = 10;
-int LED_openDoorIndicatorPin = 9;  
+int LED_openDoorIndicatorPin = 9; 
+int LED_emergencyStopIndicator = 8;  
 
 const int stepsPerRevolution = 200; //Depends on stepper motor 
 const int mmToOpen = 0; //TBD 
@@ -36,6 +37,7 @@ Stepper extrusionStepperMotor(stepsPerRevolution, extrusionStepperPin1, extrusio
 
 void setup(){
   pinMode(LED_onPin, OUTPUT); 
+  pinMode(LED_emergencyStopIndicator, OUTPUT); 
   pinMode(limitSwitchPin, INPUT); 
   pinMode(rotationalStepperPin1, INPUT);
   pinMode(rotationalStepperPin2, INPUT);
@@ -53,6 +55,9 @@ void setup(){
 
 void loop(){
   if(!EMERGENCY_ON_STATE){
+    if(digitalRead(tactileOnButton) == HIGH){
+      ON_STATE = true; 
+    }    
     if(ON_STATE){
       onProcedure();
     }
@@ -62,9 +67,8 @@ void loop(){
     if(OFF_STATE){
       offProcedure();
     }
-     
   }else{
-    
+    blinkEmergencyLED(); 
   }
 }
 
@@ -81,7 +85,7 @@ void offProcedure(){
 }
 
 void sanatizeProcedure(){
-  if(isClosed(){
+  if(isClosed){
     UV_timedRun(UV_Runtime_1);
     setRotationalMotorDegrees(rotationInDegrees1);
     UV_timedRun(UV_Runtime_2);
@@ -90,6 +94,7 @@ void sanatizeProcedure(){
     setRotationalMotorDegrees(rotationInDegrees3);
     UV_timedRun(UV_Runtime_4);
     setRotationalMotorDegrees(rotationInDegrees4);
+    ON_STATE = false; 
   }
 }
 
@@ -116,6 +121,13 @@ void UV_timedRun(int milliseconds){
 
 void emergencyInterrupt(){
   EMERGENCY_INTERRUPT_STATE = true; 
+}
+
+void blinkEmergencyLED(){
+ digitalWrite(LED_emergencyStopIndicator, HIGH); 
+ delay(100); 
+ digitalWrite(LED_emergencyStopIndicator, HIGH); 
+ delay(100); 
 }
 
 boolean waitMilliseconds(int milliseconds){
