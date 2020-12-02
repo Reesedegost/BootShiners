@@ -26,6 +26,9 @@ const int rotationInDegrees3 = 0; //TBD
 const int rotationInDegrees4 = 0; //TBD  
 
 boolean EMERGENCY_INTERRUPT_STATE = false;
+boolean ON_STATE = false; 
+boolean SANATIZE_STATE = false; 
+boolean OFF_STATE = false; 
 
 Stepper rotationalStepperMotor(stepsPerRevolution, rotationalStepperPin1, rotationalStepperPin2, rotationalStepperPin3, rotatioanlStepperPin4); 
 Stepper extrusionStepperMotor(stepsPerRevolution, extrusionStepperPin1, extrusionStepperPin2, extrusionStepperPin3, extrusionStepperPin4);
@@ -49,7 +52,15 @@ void setup(){
 
 void loop(){
   if(!EMERGENCY_ON_STATE){
-
+    if(ON_STATE){
+      
+    }
+    if(SANATIZE_STATE){
+      
+    }
+    if(OFF_STATE){
+      
+    }
      
   }else{
     
