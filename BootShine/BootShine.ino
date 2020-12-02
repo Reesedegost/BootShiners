@@ -29,6 +29,7 @@ boolean EMERGENCY_INTERRUPT_STATE = false;
 boolean ON_STATE = false; 
 boolean SANATIZE_STATE = false; 
 boolean OFF_STATE = false; 
+boolean isClosed = false; 
 
 Stepper rotationalStepperMotor(stepsPerRevolution, rotationalStepperPin1, rotationalStepperPin2, rotationalStepperPin3, rotatioanlStepperPin4); 
 Stepper extrusionStepperMotor(stepsPerRevolution, extrusionStepperPin1, extrusionStepperPin2, extrusionStepperPin3, extrusionStepperPin4);
@@ -53,13 +54,13 @@ void setup(){
 void loop(){
   if(!EMERGENCY_ON_STATE){
     if(ON_STATE){
-      
+      onProcedure();
     }
     if(SANATIZE_STATE){
-      
+      sanatizeProcedure();
     }
     if(OFF_STATE){
-      
+      offProcedure();
     }
      
   }else{
@@ -67,7 +68,20 @@ void loop(){
   }
 }
 
+void onProcedure(){
+  if(!isClosed){
+    closeContainer(); 
+  }
+}
+
+void offProcedure(){
+  if(isClosed){
+    openContainer();
+  }
+}
+
 void sanatizeProcedure(){
+  if(isClosed(){
     UV_timedRun(UV_Runtime_1);
     setRotationalMotorDegrees(rotationInDegrees1);
     UV_timedRun(UV_Runtime_2);
@@ -76,17 +90,20 @@ void sanatizeProcedure(){
     setRotationalMotorDegrees(rotationInDegrees3);
     UV_timedRun(UV_Runtime_4);
     setRotationalMotorDegrees(rotationInDegrees4);
+  }
 }
 
 void openContainer(){
   //Move stepper to extrude the table outside of the container for remote operation. 
   digitalWrite(LED_onPin, HIGH);
   setExtrusionMotorMM(mmToOpen);
+  isClosed = false; 
 }
 void closeContainer(){
   //Move stepper to retract the table back into the container. 
   digitalWrite(LED_onPin, LOW); 
   setExtrusionMotorMM(mmToClose);
+  isClosed = true;
 }
 
 void UV_timedRun(int milliseconds){
