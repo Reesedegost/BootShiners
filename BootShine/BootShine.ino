@@ -3,14 +3,18 @@
 unsigned long previousMilliseconds = 0; 
 
 int limitSwitchPin = 13;
+
 //Each Stepper Motor takes 4 pins 
 int rotationalStepperPin1 = 7, rotationalStepperPin2 = 6, rotationalStepperPin3 = 5, rotatioanlStepperPin4 = 4; 
 int extrusionStepperPin1 = 3, extrusionStepperPin2 = 2, extrusionStepperPin3 = 1, extrusionStepperPin4 = 0; 
+
 int UV_RelayPin = 12; 
-int tactileOnButtonPin = 11; 
-int tactileEmergencyStopPin = 10;
+
 int LED_openDoorIndicatorPin = 9; 
 int LED_emergencyStopIndicator = 8;  
+
+int tactileOnButtonPin = 11; 
+int tactileEmergencyStopPin = 10;
 
 const int stepsPerRevolution = 200; //Depends on stepper motor 
 const int mmToOpen = 0; //TBD 
@@ -55,7 +59,7 @@ void setup(){
 
 void loop(){
   if(!EMERGENCY_ON_STATE){
-    if(digitalRead(tactileOnButton) == HIGH){
+    if(digitalRead(tactileOnButtonPin) == HIGH){
       ON_STATE = true; 
     }    
     if(ON_STATE){
@@ -75,6 +79,8 @@ void loop(){
 void onProcedure(){
   if(!isClosed){
     closeContainer(); 
+  }else{
+    SANATIZE_STATE = true; 
   }
 }
 
@@ -94,7 +100,9 @@ void sanatizeProcedure(){
     setRotationalMotorDegrees(rotationInDegrees3);
     UV_timedRun(UV_Runtime_4);
     setRotationalMotorDegrees(rotationInDegrees4);
+    SANATIZE_STATE = false; 
     ON_STATE = false; 
+    OFF_STATE = true; 
   }
 }
 
