@@ -2,19 +2,11 @@
 
 unsigned long previousMilliseconds = 0; 
 
-int limitSwitchPin = 13;
+int limitSwitchLeft = 9;
+int limitSwitchRight = 8;
 
 //Each Stepper Motor takes 4 pins 
-int rotationalStepperPin1 = 7, rotationalStepperPin2 = 6, rotationalStepperPin3 = 5, rotatioanlStepperPin4 = 4; 
-int extrusionStepperPin1 = 3, extrusionStepperPin2 = 2, extrusionStepperPin3 = 1, extrusionStepperPin4 = 0; 
-
-int UV_RelayPin = 12; 
-
-int LED_openDoorIndicatorPin = 9; 
-int LED_emergencyStopIndicator = 8;  
-
-int tactileOnButtonPin = 11; 
-int tactileEmergencyStopPin = 10;
+int UV_RelayPin = 13; 
 
 const int stepsPerRevolution = 200; //Depends on stepper motor 
 const int mmToOpen = 0; //TBD 
@@ -37,29 +29,24 @@ boolean OFF_STATE = false;
 boolean isClosed = false; 
 
 Stepper rotationalStepperMotor(stepsPerRevolution, rotationalStepperPin1, rotationalStepperPin2, rotationalStepperPin3, rotatioanlStepperPin4); 
-Stepper extrusionStepperMotor(stepsPerRevolution, extrusionStepperPin1, extrusionStepperPin2, extrusionStepperPin3, extrusionStepperPin4);
 
 void setup(){
   pinMode(LED_onPin, OUTPUT); 
   pinMode(LED_emergencyStopIndicator, OUTPUT); 
-  pinMode(limitSwitchPin, INPUT); 
+  pinMode(limitSwitchLeft, INPUT); 
+  pinMode(limitSwitchRight, INPUT);
   pinMode(rotationalStepperPin1, INPUT);
   pinMode(rotationalStepperPin2, INPUT);
-  pinMode(rotatioanlStepperPin3, INPUT); 
-  pinMode(rotatioanlStepperPin4, INPUT); 
-  pinMode(extrusionStepperPin1, INPUT); 
-  pinMode(extrusionStepperPin2, INPUT); 
-  pinMode(extrusionStepperPin3, INPUT); 
-  pinMode(extrusionStepperPin4, INPUT); 
+  pinMode(rotationalStepperPin3, INPUT); 
+  pinMode(rotationalStepperPin4, INPUT); 
   pinMode(UV_RelayPin, OUTPUT); 
   pinMode(toggleOnButtonPin, INPUT); 
-  pinMode(toggleEmergencyButtonPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(tactileEmergencyStopPin), emergencyInterrupt(), CHANGE); 
+  //attachInterrupt(digitalPinToInterrupt(tactileEmergencyStopPin), emergencyInterrupt(), CHANGE); 
 }
 
 void loop(){
-  if(!EMERGENCY_ON_STATE){
-    if(digitalRead(tactileOnButtonPin) == HIGH){
+  if(digitalRead(limitSwitchLeft) == HIGH) and if(digitalRead(limitSwitchRight) == HIGH)
+    if(digitalRead(toggleOnButtonPin) == HIGH)
       ON_STATE = true; 
     }    
     if(ON_STATE){
@@ -106,19 +93,6 @@ void sanatizeProcedure(){
   }
 }
 
-void openContainer(){
-  //Move stepper to extrude the table outside of the container for remote operation. 
-  digitalWrite(LED_onPin, HIGH);
-  setExtrusionMotorMM(mmToOpen);
-  isClosed = false; 
-}
-void closeContainer(){
-  //Move stepper to retract the table back into the container. 
-  digitalWrite(LED_onPin, LOW); 
-  setExtrusionMotorMM(mmToClose);
-  isClosed = true;
-}
-
 void UV_timedRun(int milliseconds){
   do{
      setRelay(true);
@@ -154,14 +128,6 @@ void setRelay(boolean toggle){
   }else{
     digitalWrite(UV_RelayPin, LOW); 
   }
-}
-
-void setExtrusionMotorMM(int mm){
-   extrusionStepperMotor.step(mm_to_steps(mm));
-}
-
-void setExtrusionMotorStep(int steps){
-  extrusionStepperMotor.step(steps);
 }
 
 void setRotationalMotorDegrees(int degree){
